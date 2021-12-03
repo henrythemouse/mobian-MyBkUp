@@ -1,0 +1,45 @@
+#! /usr/bin/bash
+
+notify-send "MyBkUp" "Running mybkup rsync..."
+sleep 5
+
+# su means superuser only - su options are ignored when rsync is not run as superuser
+# -a is equivalent to -rlptgoD (recursive,links,preserve,times,group(su),owner(su),Devices(su))
+# -v is verbose, the more v's the more verbose
+
+# empty the log file
+>/home/mobian/bin/rsyncLog.log
+
+echo >> /home/mobian/bin/rsyncLog.log
+echo "## start of mybkup script" >> /home/mobian/bin/rsyncLog.log
+echo "## this log is for the last time mybkup was run" >> /home/mobian/bin/rsyncLog.log
+echo "## date: $(date)" >> /home/mobian/bin/rsyncLog.log
+echo >> /home/mobian/bin/rsyncLog.log
+
+echo >> /home/mobian/bin/rsyncLog.log
+echo "## sync Pictures to pn60 Shared Pictures" >> /home/mobian/bin/rsyncLog.log
+echo >> /home/mobian/bin/rsyncLog.log
+
+# sync the Pictures dir to shared pictures
+rsync -av --ignore-existing --log-file='/home/mobian/bin/rsyncLog.log' '/home/mobian/Pictures/' gary@pn60:'/mnt/media/Public/Shared\ Pictures/PinePhone/'
+
+echo >> /home/mobian/bin/rsyncLog.log
+echo "## sync mobian Home to pn60 BackUps" >> /home/mobian/bin/rsyncLog.log
+echo >> /home/mobian/bin/rsyncLog.log
+
+# sync the home dir to pn60 backups
+rsync -av --exclude-from='/home/mobian/bin/rsyncExcludes' --log-file='/home/mobian/bin/rsyncLog.log' '/home/mobian/' gary@pn60:'/mnt/storage/BackUps/mobianBookworm/'
+
+echo >> /home/mobian/bin/rsyncLog.log
+echo "## end of mybkup script" >> /home/mobian/bin/rsyncLog.log
+echo >> /home/mobian/bin/rsyncLog.log
+
+doneMsg=" mybkup rsync is finished! Logfile is in ~/bin."
+
+notify-send "MyBkUp Done" "$doneMsg"
+
+sleep 10
+
+
+
+
