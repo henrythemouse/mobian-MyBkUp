@@ -1,5 +1,6 @@
 #! /usr/bin/bash
 
+
 notify-send "MyBkUp" "Running mybkup rsync..."
 sleep 5
 
