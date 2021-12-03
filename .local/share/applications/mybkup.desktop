@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=my bkup
+Type=Application
+Icon=mybkup.png
+Terminal=false
+Keywords=backup
+Exec=/home/mobian/bin/mybkup
+Categories=Utility;
